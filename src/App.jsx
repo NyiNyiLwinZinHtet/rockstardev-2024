@@ -1,14 +1,15 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Header from './components/Header';
 import Item from './components/Item';
 import { Container } from '@mui/material';
+import Form from './components/Form';
+import { useApp } from './AppProvider';
+import AppDrawer from './components/AppDrawer';
 
 export default function App() {
-    const inputRef = useRef();
+    const { showForm } = useApp();
 
     const [posts, setPosts] = useState([
-        { id: 5, content: 'Some content', user: 'bob' },
-        { id: 4, content: 'Some content', user: 'Lwin' },
         { id: 3, content: 'Some content', user: 'Alice' },
         { id: 2, content: 'More content', user: 'Alice' },
         { id: 1, content: 'Another content', user: 'Bob' },
@@ -27,22 +28,11 @@ export default function App() {
     return (
         <div>
             <Header />
+            {/* adding appdrawer function */}
+            <AppDrawer />
 
             <Container sx={{ mt: 4 }} maxWidth="md">
-                <form
-                    style={{ marginBottom: 20, display: 'flex' }}
-                    onSubmit={(e) => {
-                        e.preventDefault();
-
-                        const content = inputRef.current.value;
-                        content && add(content);
-
-                        e.currentTarget.reset();
-                    }}>
-                    <input type="text" style={{ flexGrow: 1 }} ref={inputRef} />
-                    <button>Add</button>
-                </form>
-
+                {showForm && <Form add={add} />}
                 {posts.map((post) => (
                     <Item
                         key={post.id} //importand point for performance make quickly
